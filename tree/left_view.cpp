@@ -22,10 +22,11 @@ public:
             while(size>0){
                 TreeNode* a=q.front();
                 q.pop();
-                if(a->left)
-                    q.push(a->left);
                 if(a->right)
                     q.push(a->right);
+                if(a->left)
+                    q.push(a->left);
+                
                 if(size==1)
                     v.push_back(a->val);
                 size--;
