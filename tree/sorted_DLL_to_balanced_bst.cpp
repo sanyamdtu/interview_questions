@@ -17,6 +17,3 @@ node *func(int n)
     root->next = func(n - (n / 2) - 1);
     return root;
 }
-int main()
-{
-}
