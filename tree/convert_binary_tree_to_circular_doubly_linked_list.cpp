@@ -1,17 +1,17 @@
-/*struct Node
+/*struct node
 {
     int data;
-    struct Node *left;
-    struct Node *right;
+    struct node *left;
+    struct node *right;
 
-    Node(int x)
+    node(int x)
     {
         data = x;
         left = right = NULL;
     }
 };
 */
-Node *add(Node *p, Node *q)
+node *add(node *p, node *q)
 {
     if (!p)
         return q;
@@ -19,8 +19,8 @@ Node *add(Node *p, Node *q)
         return p;
     else
     {
-        Node *a = p->right;
-        Node *b = q->right;
+        node *a = p->right;
+        node *b = q->right;
         p->right = b;
         b->left = p;
         a->left = q;
@@ -28,18 +28,27 @@ Node *add(Node *p, Node *q)
         return q;
     }
 }
-Node *func(Node *root)
+node *func(node *root)
 {
     if (!root)
         return NULL;
-    Node *l = NULL, *r = NULL;
+    node *l = NULL, *r = NULL;
     l = func(root->left);
     r = func(root->right);
     root->left = root->right = root;
-    Node *p = add(l, root);
+    node *p = add(l, root);
     return add(p, r);
 }
-Node *bTreeToCList(Node *root)
+node *bTreeToCList(node *root)
 {
     return func(root)->right;
+}
+node *bToDLL(node *root)
+{
+    if (!root)
+        return NULL;
+    node *a = func(root)->right;
+    a->left->right = NULL;
+    a->left = NULL;
+    return a;
 }
