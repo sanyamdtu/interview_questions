@@ -1,19 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
-int dfs(int a, vector<vector<int>> &g, int vis[], int ans[])
+int dfs(int a, vector<vector<int>> &g, int ans[])
 {
-
-    int ans = 0;
+    ans[a]++;
     for (auto i : g[a])
     {
-        if (vis[i] == 0)
-        {
-            vis[i] = 1;
-            ans[i] = dfs(i, g, vis, ans);
-        }
+        if (ans[i] == 0)
+            ans[i] = dfs(i, g, ans);
         ans[a] += ans[i];
     }
-    return vis[a];
+    return ans[a];
 }
 int main()
 {
@@ -35,41 +31,19 @@ int main()
             p[i].push_back(i + 1);
         }
     }
-    int og[n], rev[n], vis[n];
-    for (int i = 0; i < n; i++)
-    {
-        og[i] = 1, rev[i] = 1, vis[i] = 0;
-    }
-
-    for (int i = 0; i < n; i++)
-    {
-        if (vis[i] == 0)
-        {
-            og[i] = 1;
-            int c = dfs(i, g, vis, og);
-        }
-    }
-    for (int i = 0; i < n; i++)
-    {
-        if (vis[i] == 0)
-        {
-            rev[i] = 1;
-            int c = dfs(i, g, vis, rev);
-        }
-    }
     int q;
     cin >> q;
-    int f = 0;
+    int f = 0; //sign
+    int arr[n], rev[n];
+    memset(arr, 0, sizeof(arr));
+    memset(rev, 0, sizeof(rev));
     for (int i = 0; i < n; i++)
     {
-        cout << og[i] << " ";
+        if (arr[i] == 0)
+            dfs(i, g, arr);
+        if (rev[i] == 0)
+            dfs(i, p, rev);
     }
-    cout << endl;
-    for (int i = 0; i < n; i++)
-    {
-        cout << rev[i] << " ";
-    }
-    cout << endl;
     while (q--)
     {
         char ch;
@@ -79,13 +53,11 @@ int main()
             int x;
             cin >> x;
             if (f == 0)
-                cout << og[x - 1] << endl;
+                cout << arr[x - 1] << endl;
             else
                 cout << rev[x - 1] << endl;
         }
         else
-        {
             f = 1 - f;
-        }
     }
 }
