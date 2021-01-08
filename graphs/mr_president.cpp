@@ -47,6 +47,7 @@ int main()
     int c = 0;
     int i = 0;
     int ans = 0;
+    vector<int> v;
     while (c != n - 1)
     {
         if (find(arr[i].x, p) != find(arr[i].y, p))
@@ -54,6 +55,7 @@ int main()
             c++;
             un(arr[i].x, arr[i].y, p, r);
             ans += arr[i].d;
+            v.push_back(arr[i].d);
         }
     }
 }
