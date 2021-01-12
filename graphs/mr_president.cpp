@@ -2,22 +2,22 @@
 using namespace std;
 struct node
 {
-    int x, y, d;
+    long long x, y, d;
 };
 bool comp(node a, node b)
 {
-    return (a.d < b.y);
+    return (a.d < b.d);
 }
-int find(int x, int p[])
+long long find(long long x, long long p[])
 {
     if (p[x] == x)
         return x;
     return p[x] = find(p[x], p);
 }
-void un(int x, int y, int p[], int r[])
+void un(long long x, long long y, long long p[], long long r[])
 {
-    int px = find(x, p);
-    int py = find(y, p);
+    long long px = find(x, p);
+    long long py = find(y, p);
     if (r[px] > r[py])
         p[py] = px;
     else if (r[px] < r[py])
@@ -28,34 +28,66 @@ void un(int x, int y, int p[], int r[])
         p[py] = px;
     }
 }
+long long p[2000000], r[2000000];
 int main()
 {
     //long long must
-    int n, m, k;
+    long long n, m, k;
     cin >> n >> m >> k;
     node arr[m];
-    int p[n + 1], r[n + 1];
+
     memset(r, 0, sizeof(r));
-    for (int i = 0; i < n + 1; i++)
+    for (long long i = 0; i < n + 1; i++)
         p[i] = i;
-    for (int i = 0; i < m; i++)
+    for (long long i = 0; i < m; i++)
     {
-        int a, b, c;
-        cin >> arr[i].x >> arr[i].y >> arr[i].d;
+        long long a, b, c;
+        scanf("%d%d%d",&a,&b,&c);
+        arr[i].x=a;
+        arr[i].y=b;
+        arr[i].d=c;
     }
     sort(arr, arr + m, comp);
-    int c = 0;
-    int i = 0;
-    int ans = 0;
-    vector<int> v;
-    while (c != n - 1)
+    long long c = 0;
+    long long i = 0;
+    long long ans = 0;
+    vector<long long> v;
+    while (c < n - 1 && i < m)
     {
         if (find(arr[i].x, p) != find(arr[i].y, p))
         {
+
             c++;
             un(arr[i].x, arr[i].y, p, r);
             ans += arr[i].d;
             v.push_back(arr[i].d);
         }
+        i++;
     }
+
+    long long f = 0;
+    for (long long i = 2; i <= n; i++)
+    {
+        if (find(i, p) != find(i - 1, p))
+        {
+            f = 1;
+            break;
+        }
+    }
+    long long mini = 0;
+    if (f == 0)
+    {
+        if(ans>k)
+        for (long long i = v.size() - 1; i >= 0; i--)
+        {
+            mini++;
+            ans += 1 - v[i];
+            if (ans <= k)
+                break;
+        }
+    }
+    if (f == 0 && ans <= k)
+        cout << mini;
+    else
+        cout << -1;
 }
