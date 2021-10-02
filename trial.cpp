@@ -3,32 +3,39 @@ using namespace std;
 typedef long long ll;
 int main()
 {
-    int n, m;
+
+    ll n, m;
     cin >> n >> m;
-    vector<vector<pair<int, int>>> g(n + 1);
-    for (int i = 0; i < m; i++)
+    vector<ll> arr(n), qu(m);
+    for (ll i = 0; i < n; i++)
     {
-        int x, y;
-        cin >> x >> y;
-        if (x != y)
+        cin >> arr[i];
+    }
+    for (ll i = 0; i < m; i++)
+    {
+        cin >> qu[i];
+    }
+    for (auto q : qu)
+    {
+        ll lo = 1, hi = 1000000000000000000, ans = -1;
+        while (lo <= hi)
         {
-            g[x].push_back({0, y});
+            ll mid = lo + (hi - lo) / 2;
+            auto a = lower_bound(arr.begin(), arr.end(), mid) - arr.begin();
+            if (mid - a == q)
+            {
+                ans = mid;
+                break;
+            }
+            else if ((mid - a) < q)
+            {
+                lo = mid + 1;
+            }
+            else
+            {
+                hi = mid - 1;
+            }
         }
+        cout << ans << endl;
     }
-    for (int i = 1; i <= n; i++)
-    {
-        for (auto j : g[i])
-        {
-            g[j.second].push_back({1, i});
-        }
-    }
-    int dis[n + 1], vis[n + 1];
-    for (int i = 0; i < n + 1; i++)
-    {
-        dis[i] = INT_MAX;
-        vis[i] = 0;
-    }
-    dis[1] = 0;
-    set<pair<int, int>> s;
-    s.insert({1, 0});
 }

@@ -1,33 +1,82 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
 int main()
 {
-    int a, b, k;
-    cin >> a >> b >> k;
-    set<int> x, y;
-    for (int i = 1; i <= a; i++)
-    {
-        if (a % i == 0)
-            x.insert(i);
-    }
-    for (int i = 1; i <= b; i++)
-    {
-        if (b % i == 0)
-            y.insert(i);
-    }
-    int c = 1;
-    for (auto i : x)
-    {
+	string a;
+	getline(cin, a);
+	int n = a.length();
+	unordered_map<char, int> m;
+	m['-'] = m['+'] = 1;
+	m['*'] = m['/'] = 2;
+	m['('] = INT_MIN;
+	stack<char> op;
+	stack<int> s;
+	for (int i = 0; i < n; i++)
+	{
+		if (a[i] == ' ')
+			continue;
+		if (a[i] == '+' || a[i] == '-' || a[i] == '/' || a[i] == '*')
+		{
+			while (!op.empty() && m[op.top()] >= m[a[i]])
+			{
 
-        if (i == *(y.begin()))
-        {
-            c = i;
-            k--;
-            if (k == 0)
-                break;
-            y.erase(y.begin());
-        }
-    }
-    cout << c;
+				int b = s.top();
+				s.pop();
+				int a = s.top();
+				s.pop();
+				if (op.top() == '+')
+					s.push(a + b);
+				else if (op.top() == '-')
+					s.push(a - b);
+				else if (op.top() == '*')
+					s.push(a * b);
+				else
+					s.push(a / b);
+				op.pop();
+			}
+			op.push(a[i]);
+		}
+		else if (a[i] == ')')
+		{
+			while (!op.empty() && op.top() != '(')
+			{
+				int b = s.top();
+				s.pop();
+				int a = s.top();
+				s.pop();
+				if (op.top() == '+')
+					s.push(a + b);
+				else if (op.top() == '-')
+					s.push(a - b);
+				else if (op.top() == '*')
+					s.push(a * b);
+				else
+					s.push(a / b);
+				op.pop();
+			}
+			op.pop();
+		}
+		else
+		{
+			s.push(a[i] - '0');
+		}
+	}
+	// cout << "opo";
+	while (!op.empty() && !s.empty())
+	{
+		int b = s.top();
+		s.pop();
+		int a = s.top();
+		s.pop();
+		if (op.top() == '+')
+			s.push(a + b);
+		else if (op.top() == '-')
+			s.push(a - b);
+		else if (op.top() == '*')
+			s.push(a * b);
+		else
+			s.push(a / b);
+		op.pop();
+	}
+	cout << s.top();
 }
